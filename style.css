@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+:root {
+  --primaryColor: #f09d51;
+  --mainWhite: #fff;
+  --mainBlack: #222;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  color: var(--mainBlack);
+  background: var(--mainWhite);
+  font-family: 'Lato', sans-serif;
+  overflow-x: hidden;
+}
+button {
+  outline: none;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+/* MainNavigation CSS */
+nav {
+  background: #e7e2dd;
+  height: 70px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 0 40px;
+  z-index: 1;
+}
+.navbar {
+  max-width: 1200px;
+  margin: auto;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-icon {
+  cursor: pointer;
+  position: relative;
+}
+.badge {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  font-weight: 700;
+  background: var(--primaryColor);
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 30%;
+}
+
+/* Products Section CSS */
+.products {
+  margin: 90px 0;
+  padding: 0 20px;
+}
+.products .title {
+  text-align: center;
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+.products .container {
+  max-width: 85%;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.product-item {
+  margin: 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgb(0, 0, 0, 0.2);
+  position: relative;
+}
+.product-item .image {
+  max-height: 90%;
+}
+.product-item img {
+  max-width: 100%;
+  object-fit: cover;
+}
+.product-item .info {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.info h3 {
+  margin-bottom: 8px;
+}
+.price {
+  font-size: 21px;
+  letter-spacing: 2px;
+  color: var(--primaryColor);
+  font-weight: bold;
+}
+.product-item .actions {
+  margin-bottom: 15px;
+  text-align: end;
+  margin-right: 10px;
+}
+.product-item .add-btn {
+  background: var(--primaryColor);
+  border: 1px solid var(--primaryColor);
+  margin-right: 5px;
+}
+.product-item .view-btn {
+  background: transparent;
+  border: 1px solid var(--primaryColor);
+}
+.product-item .add-btn:hover {
+  opacity: 0.9;
+}
+.product-item button i {
+  margin-right: 10px;
+}
+
+/* Cart Section CSS */
+.cart-content {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  width: 30vw;
+  background: #eee;
+  padding: 20px;
+  z-index: 3;
+  opacity: 0;
+  border-radius: 3px;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+.cart .cart-items {
+  max-height: 300px;
+  overflow-y: auto;
+}
+.cart-content::before {
+  width: 0;
+  height: 0;
+  border: 13px solid transparent;
+  border-bottom-color: #eee;
+  position: absolute;
+  content: '';
+  top: -25px;
+  right: 20px;
+}
+.cart .cart-items::-webkit-scrollbar {
+  width: 7px;
+}
+.cart .cart-items::-webkit-scrollbar-track {
+  background-color: #e7e2dd;
+  border-radius: 20px;
+}
+.cart .cart-items::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 25px;
+}
+.cart.show .cart-content {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cart .title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.cart-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  grid-column-gap: 12px;
+  margin: 12px 0;
+}
+.cart-item img {
+  width: 65px;
+  height: 65px;
+  border-radius: 4px;
+}
+.cart-item h5 {
+  letter-spacing: 1.3px;
+  margin: 5px 0;
+}
+.cart-item button {
+  background: transparent;
+  color: gray;
+  font-size: 15px;
+  padding: 5px 0;
+}
+.cart .quantity {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+.quantity svg {
+  cursor: pointer;
+}
+.quantity span {
+  text-align: center;
+  font-weight: 700;
+}
+.cart-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+.cart .clear-btn {
+  padding: 7px 20px;
+  background-color: var(--primaryColor);
+}
+.cart-footer h3 {
+  margin-bottom: 15px;
+}
+
+/* Modal Section CSS */
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+}
+.modal .overlay {
+  width: 100%;
+  height: 100%;
+  background: rgb(240, 157, 81, 0.3);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.modal-content {
+  position: absolute;
+  width: 80vw;
+  max-width: 800px;
+  top: 25vh;
+  background-color: #fff;
+  border-radius: 7px;
+  overflow: hidden;
+  min-height: 270px;
+  display: flex;
+  scale: 0;
+  transition: all 0.3s ease;
+}
+.modal-content > div {
+  width: 50%;
+}
+.modal-content .left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.modal .right {
+  padding: 15px;
+  position: relative;
+}
+.modal .right p {
+  margin-top: 10px;
+  color: #222;
+}
+.modal .right button {
+  position: absolute;
+  bottom: 17px;
+  right: 20px;
+  background-color: var(--primaryColor);
+}
+.modal .right button:hover {
+  opacity: 0.9;
+}
+.modal.show {
+  pointer-events: auto;
+}
+.modal.show .overlay {
+  opacity: 1;
+}
+.modal.show .modal-content {
+  scale: 1;
+}
+
+/* Responsive media querry */
+@media (max-width: 1200px) {
+  .cart-content {
+    width: 55%;
+  }
+}
+@media (max-width: 768px) {
+  .cart-content {
+    width: 65%;
+  }
+}
+@media (max-width: 576px) {
+  .cart-content {
+    width: 100%;
+    right: 0;
+  }
+}

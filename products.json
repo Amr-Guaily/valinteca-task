@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "title": "single panel bed",
+      "price": 12.99,
+      "image": "./images/product-1.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    },
+
+    {
+      "id": "2",
+      "title": "fridge",
+      "price": 88.99,
+      "image": "./images/product-3.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    },
+
+    {
+      "id": "3",
+      "title": "dresser",
+      "price": 32.99,
+      "image": "./images/product-4.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    },
+    {
+      "id": "4",
+      "title": "Couch",
+      "price": 45.99,
+      "image": "./images/product-5.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    },
+    {
+      "id": "5",
+      "title": "twin panel bed",
+      "price": 22.99,
+      "image": "./images/product-2.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    },
+    {
+      "id": "6",
+      "title": "table",
+      "price": 33.99,
+      "image": "./images/product-6.jpeg",
+      "inCart": false,
+      "desc": "Some kind if description to that product.."
+    }
+  ]
+}
