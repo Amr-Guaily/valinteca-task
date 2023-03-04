@@ -50,7 +50,7 @@ function renderProducts(products) {
 
   products.forEach(({ id, title, price, image, inCart }) => {
     productsContainer.innerHTML += `
-      <div class="product-item" data-id=${id}>
+      <div class="product-item" >
             <div class="image">
                 <img src="${image}" class="product-overlay" />
             </div>
@@ -59,7 +59,7 @@ function renderProducts(products) {
                 <span class="price">${price}</span>
             </div>
             <div class='actions'>
-              <button onclick="ToggleHandler(${id})" class="add-btn">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
+              <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
               <button onclick="renderModal(${id})" class="view-btn">View</button>
             </div>
         </div>`;
@@ -91,7 +91,7 @@ function addToCart(prodcut) {
   setPrice();
 
   // Update btn (get the selected btn bassed on data-*attribute)
-  productsContainer.querySelector(`[data-id="${prodcut.id}"] .add-btn`).textContent = "remove from cart";
+  document.querySelectorAll(`[data-id="${prodcut.id}"]`).forEach(btn => btn.textContent = "Remove from cart");
 }
 
 // Remove from cart
@@ -106,12 +106,12 @@ function removeFromCart(prodcutId) {
   localStorage.setItem(`${prefix}cart`, JSON.stringify(cartProducts));
 
   // remove from screen 
-  cartItems.querySelector(`[data-id="${prodcutId}"]`).remove();
+  cartItems.querySelector(`[data-cartItem="${prodcutId}"]`).remove();
   cartLength.innerText = cartProducts.length;
   setPrice();
 
   // update btn (get the selected btn bassed on data-*attribute)
-  productsContainer.querySelector(`[data-id="${prodcutId}"] .add-btn`).textContent = "Add to cart";
+  document.querySelectorAll(`[data-id="${prodcutId}"]`).forEach(btn => btn.textContent = textContent = "Add to cart");
 }
 
 // Clear cart
@@ -134,14 +134,14 @@ function clearCart() {
   setPrice();
 
   // update btn (get the selected btn based on data attribute)
-  productsContainer.querySelectorAll('.add-btn').forEach(btn => btn.textContent = "Add to cart");
+  document.querySelectorAll('.add-btn').forEach(btn => btn.textContent = "Add to cart");
 }
 
 // Render cart items
 function renderCart(product) {
   let { id, image, title, price, quantity } = product;
   cartItems.innerHTML += `
-    <li class="cart-item" data-id=${id} >
+    <li class="cart-item" data-cartItem=${id}>
         <div class="image">
             <img src="${image}" />
         </div>
@@ -193,7 +193,7 @@ function renderModal(productId) {
       <h3>${title}</h3>
       <span class="price">${price}</span>
       <p>${desc}</p>
-      <button onclick="ToggleHandler(${id}, this)">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
+      <button data-id=${id} class="add-btn" onclick="ToggleHandler(${id})">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
     </div>
   `;
   modal.parentElement.classList.add('show');
