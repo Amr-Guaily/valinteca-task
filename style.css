@@ -112,16 +112,15 @@ nav {
   text-align: end;
   margin-right: 10px;
 }
-.product-item .add-btn {
+.add-btn {
   background: var(--primaryColor);
-  border: 1px solid var(--primaryColor);
-  margin-right: 5px;
 }
 .product-item .view-btn {
   background: transparent;
   border: 1px solid var(--primaryColor);
+  margin-left: 5px;
 }
-.product-item .add-btn:hover {
+.add-btn:hover {
   opacity: 0.9;
 }
 .product-item button i {
@@ -273,10 +272,6 @@ nav {
   position: absolute;
   bottom: 17px;
   right: 20px;
-  background-color: var(--primaryColor);
-}
-.modal .right button:hover {
-  opacity: 0.9;
 }
 .modal.show {
   pointer-events: auto;

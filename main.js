@@ -59,20 +59,20 @@ function renderProducts(products) {
                 <span class="price">${price}</span>
             </div>
             <div class='actions'>
-              <button onclick="ToggleHandler(${id}, this)" class="add-btn">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
+              <button onclick="ToggleHandler(${id})" class="add-btn">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
               <button onclick="renderModal(${id})" class="view-btn">View</button>
             </div>
         </div>`;
   });
 }
 
-function ToggleHandler(productId, btn) {
+function ToggleHandler(productId) {
   const selectedProduct = products.find(product => product.id == productId);
-  selectedProduct.inCart ? removeFromCart(productId, btn) : addToCart(selectedProduct, btn);
+  selectedProduct.inCart ? removeFromCart(productId) : addToCart(selectedProduct);
 }
 
 // Add to cart
-function addToCart(prodcut, btn) {
+function addToCart(prodcut) {
   // update product state (inCart: true)
   prodcut.inCart = true;
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
@@ -90,12 +90,12 @@ function addToCart(prodcut, btn) {
   renderCart(cartItem);
   setPrice();
 
-  // Update btn
-  btn.textContent = "remmove from cart";
+  // Update btn (get the selected btn bassed on data-*attribute)
+  productsContainer.querySelector(`[data-id="${prodcut.id}"] .add-btn`).textContent = "remove from cart";
 }
 
 // Remove from cart
-function removeFromCart(prodcutId, btn) {
+function removeFromCart(prodcutId) {
   // update product state (inCart: false)
   const selectedProduct = products.find(product => product.id == prodcutId);
   selectedProduct.inCart = false;
@@ -110,8 +110,8 @@ function removeFromCart(prodcutId, btn) {
   cartLength.innerText = cartProducts.length;
   setPrice();
 
-  // update btn
-  btn.textContent = "Add to cart";
+  // update btn (get the selected btn bassed on data-*attribute)
+  productsContainer.querySelector(`[data-id="${prodcutId}"] .add-btn`).textContent = "Add to cart";
 }
 
 // Clear cart
@@ -133,7 +133,7 @@ function clearCart() {
   // update total price
   setPrice();
 
-  // update btn
+  // update btn (get the selected btn based on data attribute)
   productsContainer.querySelectorAll('.add-btn').forEach(btn => btn.textContent = "Add to cart");
 }
 
