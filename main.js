@@ -13,7 +13,7 @@ const cartBtn = document.querySelector('.cart-icon'),
 //? prefix => To avoid conflict with other localStorage items
 const prefix = "VALINTECA_TASK-";
 let products = JSON.parse(localStorage.getItem(`${prefix}products`)),
-  cartProducts = JSON.parse(localStorage.getItem(`${prefix}cart`)) || [];
+  cartProducts = getCartProducts();
 
 // #### Events ####
 document.addEventListener('DOMContentLoaded', async () => {
@@ -32,7 +32,6 @@ clearCartBtn.addEventListener('click', clearCart);
 document.addEventListener('click', (e) => e.target.parentElement.classList.remove('show'));
 
 // ##### Functions #####
-// Fetch data from json file
 async function fetchProducts() {
   res = await fetch('./products.json');
   data = await res.json();
@@ -44,7 +43,11 @@ async function fetchProducts() {
     console.log(err);
   }
 }
-// Save & Render all products
+
+function getCartProducts() {
+  return JSON.parse(localStorage.getItem(`${prefix}products`))?.filter(prodcut => prodcut.inCart) || [];
+}
+
 function renderProducts(products) {
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
@@ -59,7 +62,10 @@ function renderProducts(products) {
                 <span class="price">${price}</span>
             </div>
             <div class='actions'>
-              <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
+              <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
+                <span>Add to cart</span>
+                <span>Remove from cart</span>
+              </button>
               <button onclick="renderModal(${id})" class="view-btn">View</button>
             </div>
         </div>`;
@@ -71,64 +77,48 @@ function ToggleHandler(productId) {
   selectedProduct.inCart ? removeFromCart(productId) : addToCart(selectedProduct);
 }
 
-// Add to cart
 function addToCart(prodcut) {
   // update product state (inCart: true)
   prodcut.inCart = true;
+  prodcut.quantity = 1;
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
-  // Add to localStorage
-  const cartItem = {
-    ...prodcut,
-    quantity: 1,
-  };
-  cartProducts.push(cartItem);
-  localStorage.setItem(`${prefix}cart`, JSON.stringify(cartProducts));
-
   // Update Screen
-  cartLength.innerText = cartProducts.length;
-  renderCart(cartItem);
+  cartLength.innerText = getCartProducts().length;
+  renderCart(prodcut);
   setPrice();
 
   // Update btn (get the selected btn bassed on data-*attribute)
   document.querySelectorAll(`[data-id="${prodcut.id}"]`).forEach(btn => btn.textContent = "Remove from cart");
 }
 
-// Remove from cart
 function removeFromCart(prodcutId) {
   // update product state (inCart: false)
   const selectedProduct = products.find(product => product.id == prodcutId);
   selectedProduct.inCart = false;
+  delete selectedProduct.quantity;
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
-
-  // remove from localStorage
-  cartProducts = cartProducts.filter(itm => itm.id != prodcutId);
-  localStorage.setItem(`${prefix}cart`, JSON.stringify(cartProducts));
 
   // remove from screen 
   cartItems.querySelector(`[data-cartItem="${prodcutId}"]`).remove();
-  cartLength.innerText = cartProducts.length;
+  cartLength.innerText = getCartProducts().length;
   setPrice();
 
   // update btn (get the selected btn bassed on data-*attribute)
   document.querySelectorAll(`[data-id="${prodcutId}"]`).forEach(btn => btn.textContent = textContent = "Add to cart");
 }
 
-// Clear cart
 function clearCart() {
   // update all products state (inCart: false)
   products = products.map((product) => {
+    delete product.quantity;
     return { ...product, inCart: false };
   });
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
-  // clear localStorage
-  cartProducts = [];
-  localStorage.setItem(`${prefix}cart`, JSON.stringify(cartProducts));
-
   // clear UI
   cartItems.innerHTML = '';
-  cartLength.innerText = cartProducts.length;
+  cartLength.innerText = 0;
 
   // update total price
   setPrice();
@@ -137,7 +127,6 @@ function clearCart() {
   document.querySelectorAll('.add-btn').forEach(btn => btn.textContent = "Add to cart");
 }
 
-// Render cart items
 function renderCart(product) {
   let { id, image, title, price, quantity } = product;
   cartItems.innerHTML += `
@@ -160,30 +149,28 @@ function renderCart(product) {
   setPrice();
 }
 
-// change quantity
 function changeQuantity(action, prodcutId) {
-  const selectedProduct = cartProducts.find((product) => product.id == prodcutId);
+  const selectedProduct = products.find((product) => product.id == prodcutId);
   if (action == "decrement" && selectedProduct.quantity > 1) {
     selectedProduct.quantity--;
   } else if (action == "increment") {
     selectedProduct.quantity++;
   }
   // update localStorage
-  localStorage.setItem(`${prefix}cart`, JSON.stringify(cartProducts));
+  localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
   // update screen
   cartItems.innerHTML = '';
-  cartProducts.forEach((product) => renderCart(product));
+  getCartProducts().forEach((product) => renderCart(product));
 }
-// set total price
+
 function setPrice() {
-  let total = cartProducts.reduce((sum, product) => {
+  let total = getCartProducts().reduce((sum, product) => {
     return sum + (product.price * product.quantity);
   }, 0);
   totalPrice.innerText = total.toFixed(2);
 }
 
-// modal
 function renderModal(productId) {
   const selectedProduct = products.find((product) => product.id == productId);
   const { id, image, desc, title, price, inCart } = selectedProduct;
@@ -193,7 +180,10 @@ function renderModal(productId) {
       <h3>${title}</h3>
       <span class="price">${price}</span>
       <p>${desc}</p>
-      <button data-id=${id} class="add-btn" onclick="ToggleHandler(${id})">${inCart ? "Remove from Cart" : "Add to Cart"}</button>
+      <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
+        <span>Add to cart</span>
+        <span>Remove from cart</span>
+      </button>
     </div>
   `;
   modal.parentElement.classList.add('show');

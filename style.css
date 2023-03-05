@@ -112,6 +112,18 @@ nav {
   text-align: end;
   margin-right: 10px;
 }
+.add-btn.add span:first-child {
+  display: block;
+}
+.add-btn.add span:nth-child(2) {
+  display: none;
+}
+.add-btn.remove span:nth-child(2) {
+  display: block;
+}
+.add-btn.remove span:first-child {
+  display: none;
+}
 .add-btn {
   background: var(--primaryColor);
 }
