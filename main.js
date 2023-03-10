@@ -151,7 +151,9 @@ function renderCart(product) {
 
 function changeQuantity(action, prodcutId) {
   const selectedProduct = products.find((product) => product.id == prodcutId);
-  if (action == "decrement" && selectedProduct.quantity > 1) {
+  if (action == "decrement" && selectedProduct.quantity <= 1) {
+    if (confirm('Are you sure you want to remove item from your cart?')) removeFromCart(prodcutId);
+  } else if (action == "decrement") {
     selectedProduct.quantity--;
   } else if (action == "increment") {
     selectedProduct.quantity++;
@@ -160,8 +162,8 @@ function changeQuantity(action, prodcutId) {
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
   // update screen
-  cartItems.innerHTML = '';
-  getCartProducts().forEach((product) => renderCart(product));
+  cartItems.querySelector(`[data-cartItem="${prodcutId}"] span`).textContent = selectedProduct.quantity;
+  setPrice();
 }
 
 function setPrice() {
