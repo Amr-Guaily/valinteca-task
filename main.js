@@ -51,11 +51,11 @@ function getCartProducts() {
 function renderProducts(products) {
   localStorage.setItem(`${prefix}products`, JSON.stringify(products));
 
-  products.forEach(({ id, title, price, image, inCart }) => {
+  products.forEach(({ id, title, price, image, desc, inCart }) => {
     productsContainer.innerHTML += `
       <div class="product-item" >
             <div class="image">
-                <img src="${image}" class="product-overlay" />
+                <img src="${image}"/>
             </div>
             <div class="info">
                 <h3>${title}</h3>
@@ -66,7 +66,9 @@ function renderProducts(products) {
                 <span>Add to cart</span>
                 <span>Remove from cart</span>
               </button>
-              <button onclick="renderModal(${id})" class="view-btn">View</button>
+              <button onclick="renderModal(${id}, this)" data-img-src=${image} data-title=${title} data-price=${price} data-desc="${desc}" class="view-btn">
+                View
+              </button>
             </div>
         </div>`;
   });
@@ -182,16 +184,23 @@ function setPrice() {
   totalPrice.innerText = total.toFixed(2);
 }
 
-function renderModal(productId) {
-  const selectedProduct = products.find((product) => product.id == productId);
-  const { id, image, desc, title, price, inCart } = selectedProduct;
+function renderModal(productId, btn) {
+  // pull data attributes values
+  const imgSrc = btn.dataset.imgSrc;
+  const title = btn.dataset.title;
+  const price = btn.dataset.price;
+  const desc = btn.dataset.desc;
+
+  // Get the current class of the add-btn (add or remove)
+  const inCart = [...btn.previousElementSibling.classList][1];
+
   modal.innerHTML = `
-    <div class="left"><img src="${image}" alt="product-img" /></div>
+    <div class="left"><img src="${imgSrc}" alt="product-img" /></div>
     <div class="right">
       <h3>${title}</h3>
-      <span class="price">${price}</span>
+      <span class="price">${price}</span> 
       <p>${desc}</p>
-      <button data-id=${id} onclick="toggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
+      <button data-id=${productId} onclick="toggleHandler(${productId})" class="add-btn ${inCart}">
         <span>Add to cart</span>
         <span>Remove from cart</span>
       </button>
