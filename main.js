@@ -62,7 +62,7 @@ function renderProducts(products) {
                 <span class="price">${price}</span>
             </div>
             <div class='actions'>
-              <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
+              <button data-id=${id} onclick="toggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
                 <span>Add to cart</span>
                 <span>Remove from cart</span>
               </button>
@@ -72,7 +72,7 @@ function renderProducts(products) {
   });
 }
 
-function ToggleHandler(productId) {
+function toggleHandler(productId) {
   const selectedProduct = products.find(product => product.id == productId);
   selectedProduct.inCart ? removeFromCart(productId) : addToCart(selectedProduct);
 }
@@ -89,7 +89,10 @@ function addToCart(prodcut) {
   setPrice();
 
   // Update btn (get the selected btn bassed on data-*attribute)
-  document.querySelectorAll(`[data-id="${prodcut.id}"]`).forEach(btn => btn.textContent = "Remove from cart");
+  document.querySelectorAll(`[data-id="${prodcut.id}"]`).forEach(btn => {
+    btn.classList.add('remove');
+    btn.classList.remove('add');
+  });
 }
 
 function removeFromCart(prodcutId) {
@@ -105,7 +108,10 @@ function removeFromCart(prodcutId) {
   setPrice();
 
   // update btn (get the selected btn bassed on data-*attribute)
-  document.querySelectorAll(`[data-id="${prodcutId}"]`).forEach(btn => btn.textContent = textContent = "Add to cart");
+  document.querySelectorAll(`[data-id="${prodcutId}"]`).forEach(btn => {
+    btn.classList.add('add');
+    btn.classList.remove('remove');
+  });
 }
 
 function clearCart() {
@@ -124,7 +130,10 @@ function clearCart() {
   setPrice();
 
   // update btn (get the selected btn based on data attribute)
-  document.querySelectorAll('.add-btn').forEach(btn => btn.textContent = "Add to cart");
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.classList.add('add');
+    btn.classList.remove('remove');
+  });
 }
 
 function renderCart(product) {
@@ -182,7 +191,7 @@ function renderModal(productId) {
       <h3>${title}</h3>
       <span class="price">${price}</span>
       <p>${desc}</p>
-      <button data-id=${id} onclick="ToggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
+      <button data-id=${id} onclick="toggleHandler(${id})" class="add-btn ${inCart ? 'remove' : 'add'}">
         <span>Add to cart</span>
         <span>Remove from cart</span>
       </button>
